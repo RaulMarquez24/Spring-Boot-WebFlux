@@ -1,5 +1,7 @@
 package com.bolsadeideas.springboot.webflux.app;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,10 @@ public class SpringBootWebfluxApplication implements CommandLineRunner {
 				new Producto("Bose QuietComfort 45 Auriculares", 349.99),
 				new Producto("Dell XPS 13 Portátil", 1199.99)
 				)
-			.flatMap(producto -> productoDao.save(producto))
+			.flatMap(producto -> {
+				producto.setCreateAt(new Date());
+				return productoDao.save(producto);
+			})
 			.subscribe(producto -> log.info("Insert: " + producto.getId() + " " + producto.getNombre()));
 	}
 
